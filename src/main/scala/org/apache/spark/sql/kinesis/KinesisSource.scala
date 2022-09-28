@@ -104,7 +104,7 @@ private[kinesis] class KinesisSource(
 
   private val avoidEmptyBatches =
     sourceOptions.getOrElse("client.avoidEmptyBatches".
-      toLowerCase(Locale.ROOT), "false").toBoolean
+      toLowerCase(Locale.ROOT), "true").toBoolean
 
   private val maxParallelThreads =
     sourceOptions.getOrElse("client.maxParallelThreads".

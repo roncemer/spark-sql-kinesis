@@ -133,7 +133,7 @@ Refering $SPARK_HOME to the Spark installation directory.
 | kinesis.client.numRetries |     3 |  Maximum Number of retries for Kinesis API requests  |
 | kinesis.client.retryIntervalMs |     1000 |  Cool-off period before retrying Kinesis API  |
 | kinesis.client.maxRetryIntervalMs	| 10000	| Max Cool-off period between 2 retries	|
-| kinesis.client.avoidEmptyBatches| false | Avoid creating an empty microbatch job by checking upfront if there are any unread data in the stream before the batch is started
+| kinesis.client.avoidEmptyBatches| true | Avoid creating an empty microbatch job by checking upfront if there are any unread data in the stream before the batch is started
 
 ## Kinesis Sink Configuration
  Option-Name        | Default-Value           | Description  |

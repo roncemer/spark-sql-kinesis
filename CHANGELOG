@@ -5,6 +5,8 @@ spark-sql-kinesis_2.13-1.2.1_spark-3.2
 ----------------------------
 - Update the build configuration and source code to build aginst Spark 3.2.1 [Ron Cemer]
 
+- Change the default for kinesis.client.avoidEmptyBatches to true to avoid getting stuck with a million empty batches after a long period of no new records.  This was causing some applications to never be able to catch up to real time after getting behind.
+
 kinesis_2.12-1.2.0_spark-3.0
 ----------------------------
 - Support for Spark 3.0 and scala 2.12 (#92) [Vikram Agrawal, Vikram
