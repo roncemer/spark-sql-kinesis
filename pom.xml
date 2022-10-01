@@ -19,8 +19,8 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.roncemer.spark</groupId>
-  <artifactId>spark-sql-kinesis_2.13</artifactId>
-  <version>1.2.1_spark-3.2</version>
+  <artifactId>spark-sql-kinesis_2.14</artifactId>
+  <version>1.2.1_spark-3.2-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>Kinesis Integration for Structured Streaming</name>
   <description>Connector to read from and write into Kinesis from Structured Streaming Applications</description>
