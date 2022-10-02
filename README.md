@@ -14,12 +14,30 @@ The connector is available from the Maven Central repository. It can be used usi
 Clone spark-sql-kinesis from the source repository on GitHub.
 
 ###### Spark version 3.2.x
-	git clone git@github.com:roncemer/spark-sql-kinesis.git
-	git checkout master
-	cd spark-sql-kinesis
-	mvn install -DskipTests
+```sh
+git clone git@github.com:roncemer/spark-sql-kinesis.git
+git checkout master
+cd spark-sql-kinesis
+mvn install -DskipTests
+```
 
 This will create *target/spark-sql-kinesis_2.13-1.2.1_spark-3.2.jar* file which contains the connector code and its dependency jars.
+
+
+## Deploying to Maven Central
+
+Apply a Sonatype JIRA account, and create a ticket requesting access to OSSRH.  You must provide them with a domain which you can prove that you own by adding a TXT message to the DNS zone for that domain.  Wait for them to approve it and create your account.
+
+Create a GPG key (RSA, 4096 bits) and upload to both GitHub and the Ubuntu key servers.  Wait for it to propagate.  Set up a *$HOME/.m2/settings.xml* with a servers section with a server entry for the OSSHR server with your Sonatype username and password, as well as a profiles section with a profile entry for OSSRH which tells it how to sign JAR files using GPG.  Google is your friend for getting these things set up.
+
+Once you have all of the above prerequisites in place, you can build and publish the package to staging using this command:
+```sh
+mvn -DskipTests clean source:jar verify gpg:sign install:install deploy:deploy
+```
+
+After deployment to staging, you can go to https://s01.oss.sonatype.org/#stagingRepositories and log in with your username and password, then select the repository which was created by the deployment, and click *Close*.  Click the *Activity* tab and click *Refresh* at the top left of the top table.  If you did everything correctly, all tests will pass and the last line will say *Repository closed*.
+
+Once the repository has been closed successfully, you can click the *Release* button at the top of the top table, and your release will be pushed out to the Maven repositories and become available for public consumption.
 
 
 ## How to use it
