@@ -1,6 +1,10 @@
 Changelog
 =========
 
+spark-sql-kinesis_2.13-1.2.2_spark-3.2
+----------------------------
+- Switch to aws-java-sdk 1.11.901 to be compatible with hadoop-aws 3.2.4.
+
 spark-sql-kinesis_2.13-1.2.1_spark-3.2
 ----------------------------
 - Update the build configuration and source code to build aginst Spark 3.2.1 [Ron Cemer]
