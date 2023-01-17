@@ -26,7 +26,7 @@ This will create *target/spark-sql-kinesis_2.13-1.2.2_spark-3.2.jar* file which 
 
 ## Deploying to Maven Central
 
-Apply a Sonatype JIRA account, and create a ticket requesting access to OSSRH.  You must provide them with a domain which you can prove that you own by adding a TXT message to the DNS zone for that domain.  Wait for them to approve it and create your account.
+Apply for a Sonatype JIRA account, and create a ticket requesting access to OSSRH.  You must provide them with a domain which you can prove that you own by adding a TXT message to the DNS zone for that domain.  Wait for them to approve it and create your account.
 
 Create a GPG key (RSA, 4096 bits) and upload to both GitHub and the Ubuntu key servers.  Wait for it to propagate.  Set up a *$HOME/.m2/settings.xml* with a servers section with a server entry for the OSSHR server with your Sonatype username and password, as well as a profiles section with a profile entry for OSSRH which tells it how to sign JAR files using GPG.  Google is your friend for getting these things set up.
 
