@@ -96,8 +96,19 @@ private[kinesis] class KinesisTestUtils(streamShardCount: Int = 2) extends Loggi
     logInfo(s"Created stream ${_streamName}")
   }
 
+  // def getShards(): Seq[Shard] = {
+  //  kinesisClient.describeStream(_streamName).getStreamDescription.getShards.asScala
+  // }
+
+  // import scala.collection.JavaConverters._
+  import scala.jdk.CollectionConverters
+
   def getShards(): Seq[Shard] = {
-    kinesisClient.describeStream(_streamName).getStreamDescription.getShards.asScala
+    kinesisClient.describeStream(_streamName)
+      .getStreamDescription
+      .getShards
+      .asScala
+      .toSeq
   }
 
   def splitShard(shardId: String): Unit = {
@@ -146,9 +157,9 @@ private[kinesis] class KinesisTestUtils(streamShardCount: Int = 2) extends Loggi
   }
 
   /**
-    * Push data to Kinesis stream and return a map of
-    * shardId -> seq of (data, seq number) pushed to corresponding shard
-    */
+   * Push data to Kinesis stream and return a map of
+   * shardId -> seq of (data, seq number) pushed to corresponding shard
+   */
   def pushData(testData: Array[String], aggregate: Boolean): Map[String, Seq[(String, String)]] = {
     require(streamCreated, "Stream not yet created, call createStream() to create one")
     val producer = getProducer(aggregate)
@@ -158,8 +169,8 @@ private[kinesis] class KinesisTestUtils(streamShardCount: Int = 2) extends Loggi
   }
 
   /**
-    * Expose a Python friendly API.
-    */
+   * Expose a Python friendly API.
+   */
   def pushData(testData: java.util.List[String]): Unit = {
     pushData(testData.asScala.toArray, aggregate = false)
   }
@@ -252,7 +263,8 @@ private[kinesis] object KinesisTestUtils {
            |Kinesis tests that actually send data has been enabled by setting the environment
            |variable $envVarNameForEnablingTests to 1. This will create Kinesis Streams
            |in AWS. Please be aware that this may incur some AWS costs.
-           |By default, the tests use the endpoint URL $defaultEndpointUrl to create Kinesis streams.
+           |By default, the tests use the endpoint URL
+           |$defaultEndpointUrl to create Kinesis streams.
            |To change this endpoint URL to a different region, you can set the environment variable
            |$endVarNameForEndpoint to the desired endpoint URL
            |(e.g. $endVarNameForEndpoint="https://kinesis.us-west-2.amazonaws.com").
@@ -300,11 +312,11 @@ private[kinesis] trait KinesisDataGenerator {
 }
 
 private[kinesis] class SimpleDataGenerator(
-    client: AmazonKinesisClient) extends KinesisDataGenerator {
+                                            client: AmazonKinesisClient
+                                          ) extends KinesisDataGenerator {
   override def sendData(streamName: String, data: Array[String]):
   Map[String, Seq[(String, String)]] = {
-    val shardIdToSeqNumbers =
-      new mutable.HashMap[String, ArrayBuffer[(String, String)]]()
+    val shardIdToSeqNumbers = new mutable.HashMap[String, Seq[(String, String)]]()
     data.foreach { num =>
       val str = num.toString
       val data = ByteBuffer.wrap(str.getBytes(StandardCharsets.UTF_8))
@@ -315,12 +327,10 @@ private[kinesis] class SimpleDataGenerator(
       val putRecordResult = client.putRecord(putRecordRequest)
       val shardId = putRecordResult.getShardId
       val seqNumber = putRecordResult.getSequenceNumber()
-      val sentSeqNumbers = shardIdToSeqNumbers.getOrElseUpdate(shardId,
-        new ArrayBuffer[(String, String)]())
-      sentSeqNumbers += ((num, seqNumber))
+      val sentSeqNumbers = shardIdToSeqNumbers.getOrElseUpdate(shardId, Seq.empty[(String, String)])
+      shardIdToSeqNumbers(shardId) = sentSeqNumbers :+ ((num, seqNumber))
     }
-
-    shardIdToSeqNumbers.toMap
+    shardIdToSeqNumbers.view.mapValues(_.toList).toMap
   }
 }
 
@@ -348,8 +358,8 @@ private[kinesis] class KPLDataGenerator(regionName: String) extends KinesisDataG
     new KPLProducer(conf)
   }
 
-  override def sendData(streamName: String,
-                        data: Array[String]): Map[String, Seq[(String, String)]] = {
+  override def sendData(streamName: String, data: Array[String]):
+  Map[String, Seq[(String, String)]] = {
     val shardIdToSeqNumbers = new mutable.HashMap[String, ArrayBuffer[(String, String)]]()
     data.foreach { num =>
       val str = num.toString
@@ -369,7 +379,7 @@ private[kinesis] class KPLDataGenerator(regionName: String) extends KinesisDataG
       Futures.addCallback(future, kinesisCallBack, MoreExecutors.directExecutor())
     }
     producer.flushSync()
-    shardIdToSeqNumbers.toMap
+    shardIdToSeqNumbers.mapValues(_.toSeq).toMap
   }
 }
 

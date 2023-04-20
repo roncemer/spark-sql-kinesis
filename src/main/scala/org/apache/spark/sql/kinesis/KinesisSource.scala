@@ -35,30 +35,30 @@ import org.apache.spark.sql.types._
 import org.apache.spark.unsafe.types.UTF8String
 import org.apache.spark.util.{SerializableConfiguration, ThreadUtils, Utils}
 
- /*
-  * A [[Source]] that reads data from Kinesis using the following design.
-  *
-  *  - The [[KinesisSourceOffset]] is the custom [[Offset]] defined for this source
-  *
-  *  - The [[KinesisSource]] written to do the following.
-  *
-  *   - `getOffset()` uses the [[KinesisSourceOffset]] to query the latest
-  *      available offsets, which are returned as a [[KinesisSourceOffset]].
-  *
-  *   - `getBatch()` returns a DF
-  *   - The DF returned is based on [[KinesisSourceRDD]]
-  */
+/*
+ * A [[Source]] that reads data from Kinesis using the following design.
+ *
+ *  - The [[KinesisSourceOffset]] is the custom [[Offset]] defined for this source
+ *
+ *  - The [[KinesisSource]] written to do the following.
+ *
+ *   - `getOffset()` uses the [[KinesisSourceOffset]] to query the latest
+ *      available offsets, which are returned as a [[KinesisSourceOffset]].
+ *
+ *   - `getBatch()` returns a DF
+ *   - The DF returned is based on [[KinesisSourceRDD]]
+ */
 
 private[kinesis] class KinesisSource(
-    sqlContext: SQLContext,
-    sourceOptions: Map[String, String],
-    metadataPath: String,
-    streamName: String,
-    initialPosition: InitialKinesisPosition,
-    endPointURL: String,
-    kinesisCredsProvider: SparkAWSCredentials,
-    failOnDataLoss: Boolean = true
-    )
+                                      sqlContext: SQLContext,
+                                      sourceOptions: Map[String, String],
+                                      metadataPath: String,
+                                      streamName: String,
+                                      initialPosition: InitialKinesisPosition,
+                                      endPointURL: String,
+                                      kinesisCredsProvider: SparkAWSCredentials,
+                                      failOnDataLoss: Boolean = true
+                                    )
   extends Source with Serializable with Logging {
 
   import KinesisSource._
@@ -130,7 +130,7 @@ private[kinesis] class KinesisSource(
     // Return true if we can get back a record. Or if we have not reached the end of the stream
     (records.getRecords.size() > 0 || records.getMillisBehindLatest.longValue() > 0)
   }
-
+  import scala.collection.parallel.CollectionConverters._
   def canCreateNewBatch(shardsInfo: Array[ShardInfo]): Boolean = {
     var shardsInfoToCheck = shardsInfo.par
     val threadPoolSize = Math.min(maxParallelThreads, shardsInfoToCheck.size)
@@ -176,11 +176,11 @@ private[kinesis] class KinesisSource(
     }.toArray
 
     if (!avoidEmptyBatches
-        || prevBatchId < 0
-        || hasShardEndAsOffset(latestShardInfo)
-        || ShardSyncer.hasNewShards(prevShardsInfo, latestShardInfo)
-        || ShardSyncer.hasDeletedShards(prevShardsInfo, latestShardInfo)
-        || canCreateNewBatch(latestShardInfo)) {
+      || prevBatchId < 0
+      || hasShardEndAsOffset(latestShardInfo)
+      || ShardSyncer.hasNewShards(prevShardsInfo, latestShardInfo)
+      || ShardSyncer.hasDeletedShards(prevShardsInfo, latestShardInfo)
+      || canCreateNewBatch(latestShardInfo)) {
       currentShardOffsets = Some(new ShardOffsets(prevBatchId + 1, streamName, latestShardInfo))
     } else {
       log.info("Offsets are unchanged since `kinesis.client.avoidEmptyBatches` is enabled")
