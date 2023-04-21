@@ -21,7 +21,7 @@ import java.nio.ByteBuffer
 import java.nio.charset.StandardCharsets
 import java.util.concurrent.TimeUnit
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
 import scala.util.{Failure, Random, Success, Try}
@@ -97,7 +97,7 @@ private[kinesis] class KinesisTestUtils(streamShardCount: Int = 2) extends Loggi
   }
 
   def getShards(): Seq[Shard] = {
-    kinesisClient.describeStream(_streamName).getStreamDescription.getShards.asScala
+    kinesisClient.describeStream(_streamName).getStreamDescription.getShards.asScala.toSeq
   }
 
   def splitShard(shardId: String): Unit = {
@@ -320,7 +320,7 @@ private[kinesis] class SimpleDataGenerator(
       sentSeqNumbers += ((num, seqNumber))
     }
 
-    shardIdToSeqNumbers.toMap
+    shardIdToSeqNumbers.view.mapValues(_.toList).toMap
   }
 }
 
@@ -369,7 +369,7 @@ private[kinesis] class KPLDataGenerator(regionName: String) extends KinesisDataG
       Futures.addCallback(future, kinesisCallBack, MoreExecutors.directExecutor())
     }
     producer.flushSync()
-    shardIdToSeqNumbers.toMap
+    shardIdToSeqNumbers.mapValues(_.toSeq).toMap
   }
 }
 
