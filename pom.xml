@@ -20,7 +20,7 @@
 
   <groupId>com.roncemer.spark</groupId>
   <artifactId>spark-sql-kinesis_2.13</artifactId>
-  <version>1.2.2_spark-3.2</version>
+  <version>1.2.3_spark-3.2</version>
   <packaging>jar</packaging>
   <name>Kinesis Integration for Structured Streaming</name>
   <description>Connector to read from and write into Kinesis from Structured Streaming Applications</description>
@@ -58,7 +58,7 @@
     <connection>scm:git:git://github.com/roncemer/spark-sql-kinesis.git</connection>
     <url>http://github.com/roncemer/spark-sql-kinesis</url>
     <developerConnection>scm:git:git@github.com:roncemer/spark-sql-kinesis.git</developerConnection>
-    <tag>spark-sql-kinesis_2.13-1.2.2_spark-3.2</tag>
+    <tag>spark-sql-kinesis_2.13-1.2.3_spark-3.2</tag>
   </scm>
 
   <inceptionYear>2018</inceptionYear>
@@ -70,7 +70,7 @@
   <properties>
     <sbt.project.name>sql-kinesis</sbt.project.name>
     <spark.version>3.2.1</spark.version>
-    <scala.binary.version>2.12</scala.binary.version>
+    <scala.binary.version>2.13</scala.binary.version>
     <fasterxml.jackson.version>2.12.3</fasterxml.jackson.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>

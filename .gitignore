@@ -95,3 +95,6 @@ spark-warehouse/
 *.Rproj.*
 
 .Rproj.user
+.bloop/
+.metals/
+.vscode/
