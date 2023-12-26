@@ -4,6 +4,10 @@ Implementation of Kinesis Source Provider in Spark Structured Streaming. [SPARK-
 
 This is a fork of https://github.com/qubole/kinesis-sql with the build configuration and source code updated for building against Spark 3.2.1 in order to fix a number of bugs involving the consumer not receiving new messages after a period of no new messages being added to the Kinesis data stream.
 
+## WARNING: Relatively Unmaintained Software
+
+This project is relatively unmaintained.  If you're already using Amazon Kinesis Data Streams, instead of using Spark for processing streaming data, a far better solution is to use Kinesis Firehose Delivery Streams with AWS Lambda Functions for processing the micro-batches.  This is a far more economical solution, and is also much easier to develop.  Additionally, if you select ARM architecture for your Lambda Functions, you will save even more in terms of ongoing operating costs.  Because of these facts, use of this project is strongly discouraged in favor of a more AWS-centric approach.
+
 ## Downloading and Using the Connector
 
 The connector is available from the Maven Central repository. It can be used using the --packages option or the spark.jars.packages configuration property. Use the following connector artifact
