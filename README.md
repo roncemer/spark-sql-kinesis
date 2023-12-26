@@ -8,7 +8,7 @@ This is a fork of https://github.com/qubole/kinesis-sql with the build configura
 
 The connector is available from the Maven Central repository. It can be used using the --packages option or the spark.jars.packages configuration property. Use the following connector artifact
 
-	Spark 3.2: com.roncemer.spark/spark-sql-kinesis_2.13/1.2.2_spark-3.2
+	Spark 3.2: com.roncemer.spark/spark-sql-kinesis_2.13/1.2.3_spark-3.2
 
 ## Developer Setup
 Clone spark-sql-kinesis from the source repository on GitHub.
@@ -21,7 +21,7 @@ cd spark-sql-kinesis
 mvn install -DskipTests
 ```
 
-This will create *target/spark-sql-kinesis_2.13-1.2.2_spark-3.2.jar* file which contains the connector code and its dependency jars.
+This will create *target/spark-sql-kinesis_2.13-1.2.3_spark-3.2.jar* file which contains the connector code and its dependency jars.
 
 
 ## Deploying to Maven Central
@@ -63,7 +63,7 @@ Refering $SPARK_HOME to the Spark installation directory.
 
 ###### Open Spark-Shell
 
-	$SPARK_HOME/bin/spark-shell --jars target/spark-sql-kinesis_2.13-1.2.2_spark-3.2.jar
+	$SPARK_HOME/bin/spark-shell --jars target/spark-sql-kinesis_2.13-1.2.3_spark-3.2.jar
 
 ###### Subscribe to Kinesis Source
 	// Subscribe the "test" stream
