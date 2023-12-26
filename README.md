@@ -13,6 +13,8 @@ The connector is available from the Maven Central repository. It can be used usi
 ## Developer Setup
 Clone spark-sql-kinesis from the source repository on GitHub.
 
+You need maven, sbt, and openjdk 17 (not 21!) to successfully build this project.
+
 ###### Spark version 3.2.x
 ```sh
 git clone git@github.com:roncemer/spark-sql-kinesis.git
